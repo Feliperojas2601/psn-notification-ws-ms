@@ -4,6 +4,7 @@ import {
   MessagePattern,
   Payload,
   RmqContext,
+  Transport,
 } from '@nestjs/microservices';
 import { CreateNotificationDto } from './DTO/create-notification.dto';
 import { NotificationSocketGateway } from './notification.gateway';
@@ -14,23 +15,20 @@ export class NotificationController {
     private readonly notificationGateway: NotificationSocketGateway,
   ) {}
 
-  @MessagePattern('CREATE_NOTIFICATION')
-  async handleCreateNotification(
-    @Ctx() context: RmqContext,
+  @MessagePattern('CREATE_NOTIFICATION', Transport.RMQ)
+  async handleCreateNotification2(
     @Payload() createNotificationDto: CreateNotificationDto,
+    @Ctx() context: RmqContext,
   ) {
-    console.log('Received message:', createNotificationDto);
     const channel = context.getChannelRef();
     const originalMsg = context.getMessage();
     try {
       await this.notificationGateway.handleCreateNotification(
         createNotificationDto,
       );
-      console.log('Successfully handled message:', createNotificationDto);
       await channel.ack(originalMsg);
       console.log('Successfully handled ack');
     } catch (error) {
-      console.error('Error handling message:', error);
       await channel.nack(originalMsg);
       console.log('Successfully handled nack');
     }

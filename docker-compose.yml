@@ -17,6 +17,7 @@ services:
   psn-notification-ms:
     image: psn-notification-ms
     build: ../psn-notification-ms
+    container_name: psn-notification-ms
     env_file:
       - ../psn-notification-ms/.env
     ports:
@@ -29,12 +30,14 @@ services:
   psn-notification-ws-ms:
     image: psn-notification-ws-ms
     build: .
+    container_name: psn-notification-ws-ms
     env_file:
       - .env
     ports:
       - "4401:4401"
     depends_on: 
       - rabbitmq
+      - psn-notification-ms
     networks:
       - psn_network
 

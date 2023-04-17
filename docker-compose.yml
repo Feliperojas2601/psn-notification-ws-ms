@@ -10,16 +10,16 @@ services:
       - "5672:5672"
       - "15672:15672"
     env_file:
-      - ../psn-notification-ms/.env
+      - ../psn_notification_ms/.env
     networks:
       - psn_network
 
   psn-notification-ms-service:
     image: psn-notification-ms-service
-    build: ../psn-notification-ms
+    build: ../psn_notification_ms
     container_name: psn-notification-ms-service
     env_file:
-      - ../psn-notification-ms/.env
+      - ../psn_notification_ms/.env
     ports:
       - "4400:4400"
     depends_on: 

@@ -54,6 +54,9 @@ export class NotificationSocketGateway
       this.server
         .to(`roomId${createNotificationDto.notifierId}`)
         .emit('CREATED_NOTIFICATION', createNotificationDto);
+      console.log(
+        `Created notification to ${createNotificationDto.notifierId}`,
+      );
     } catch (e) {
       console.error(e.stack);
     }
@@ -64,6 +67,7 @@ export class NotificationSocketGateway
     const userIdNumber = userId.userId;
     const roomId = `roomId${userIdNumber}`;
     client.join(roomId);
+    console.log(`Client ${client.id} joined room ${roomId}`);
   }
 
   @SubscribeMessage('LEAVE_CONVERSATION')
